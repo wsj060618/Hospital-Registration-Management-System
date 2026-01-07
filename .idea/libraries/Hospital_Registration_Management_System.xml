@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Hospital Registration Management System">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/src" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/mysql-connector-j-9.5.0-sources.jar!/" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$" recursive="false" />
+  </library>
+</component>
