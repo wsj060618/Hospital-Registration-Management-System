@@ -13,8 +13,7 @@ import java.sql.SQLException;
 public class AppointmentSlotDao {
     /**
      * 根据医生ID和当前完整时间查询可用号源
-     * 适配timeSlot格式：上午9:00-10:00 / 下午2:00-3:00（区分上下午，12小时制转24小时制）
-     * 修复：确保SQL占位符数量和参数设置数量一致
+     * 适配timeSlot格式：9:00-10:00 / 2:00-3:00（24小时制）
      * @param conn 数据库连接
      * @param doctorId 医生ID
      * @param currentDateTimeStr 当前完整时间字符串（格式：yyyy-MM-dd HH:mm:ss）

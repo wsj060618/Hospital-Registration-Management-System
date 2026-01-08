@@ -10,7 +10,6 @@ import java.sql.SQLException;
  * 医生数据访问层，处理医生表的CRUD操作
  */
 public class DoctorDao {
-
     /**
      * 根据科室ID查询该科室下的所有医生
      * @param conn 数据库连接

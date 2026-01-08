@@ -287,7 +287,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
                     int count = departmentDao.deleteById(conn, deptId);
                     if (count > 0) {
                         JOptionPane.showMessageDialog(this, "科室删除成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
-                        loadDeptData(); // 刷新科室列表
+                        loadDeptData(""); // 刷新科室列表
                     } else {
                         JOptionPane.showMessageDialog(this, "科室删除失败，未找到该科室！", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -310,7 +310,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
         bottomPanel.add(deleteDeptBtn); // 删除按钮
         panel.add(bottomPanel, BorderLayout.SOUTH);
 
-        loadDeptData(); // 初始加载数据
+        loadDeptData(""); // 初始加载数据
         return panel;
     }
 
@@ -662,7 +662,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
      */
     private void loadAllData() {
         loadPatientData("");
-        loadDeptData();
+        loadDeptData("");
         loadSlotData();
         loadDoctorData("");
     }
@@ -672,9 +672,10 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
      */
     private void loadPatientData(String name) {
         Connection conn = null;
+        ResultSet rs;
         try {
             conn = DBUtil.getConnection();
-            ResultSet rs = patientDao.listByName(conn, name);
+            rs = patientDao.listByName(conn, name);
             patientModel.setRowCount(0);
             while (rs.next()) {
                 Object[] row = {
@@ -690,31 +691,6 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "加载患者失败：" + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            DBUtil.close(conn, null, null);
-        }
-    }
-
-    /**
-     * 加载科室数据
-     */
-    private void loadDeptData() {
-        Connection conn = null;
-        try {
-            conn = DBUtil.getConnection();
-            ResultSet rs = deptDao.listAll(conn);
-            deptModel.setRowCount(0);
-            while (rs.next()) {
-                Object[] row = {
-                        rs.getLong("deptId"),
-                        rs.getString("deptName"),
-                        rs.getString("description")
-                };
-                deptModel.addRow(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "加载科室失败：" + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
         } finally {
             DBUtil.close(conn, null, null);
         }
@@ -1005,7 +981,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
                     if (result > 0) {
                         JOptionPane.showMessageDialog(this, "新增成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
-                        loadDeptData(); // 刷新科室列表
+                        loadDeptData(""); // 刷新科室列表
                     } else {
                         JOptionPane.showMessageDialog(this, "新增失败！", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -1117,7 +1093,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
                     int count = userDao.deleteUserByUsername(conn, username);
                     if (count > 0) {
                         JOptionPane.showMessageDialog(this, "用户删除成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
-                        loadUserData(); // 刷新用户列表
+                        loadUserData(""); // 刷新用户列表
                     } else {
                         JOptionPane.showMessageDialog(this, "用户删除失败，未找到该用户！", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -1135,14 +1111,8 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
         bottomPanel.add(deleteBtn); // 删除按钮
         panel.add(bottomPanel, BorderLayout.SOUTH);
 
-        loadUserData(); // 初始加载数据
+        loadUserData(""); // 初始加载数据
         return panel;
-    }
-
-
-    // 加载用户数据
-    private void loadUserData() {
-        loadUserData("");
     }
 
     // 加载用户数据（支持搜索）
@@ -1229,7 +1199,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
                     if (result > 0) {
                         JOptionPane.showMessageDialog(this, "用户新增成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
-                        loadUserData(); // 刷新用户列表
+                        loadUserData(""); // 刷新用户列表
                     } else {
                         JOptionPane.showMessageDialog(this, "用户新增失败！", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -1351,7 +1321,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
                     if (count > 0) {
                         JOptionPane.showMessageDialog(this, "用户修改成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
-                        loadUserData(); // 刷新用户列表
+                        loadUserData(""); // 刷新用户列表
                     } else {
                         JOptionPane.showMessageDialog(this, "用户修改失败，未找到该用户！", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -1619,7 +1589,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
     // 测试入口
     public static void main(String[] args) {
         Users admin = new Users();
-        admin.setUsername("admin");
+        admin.setUsername("admin_zhang");
         admin.setPassword("123456");
         admin.setIdentity("admin");
         try {
