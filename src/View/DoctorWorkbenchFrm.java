@@ -50,7 +50,7 @@ public class DoctorWorkbenchFrm extends JFrame {
 
     // 初始化窗口
     private void initFrame() {
-        getDefaultIcon();
+        setIconImage(getDefaultIcon());
         setTitle("医生工作台 - " + currentDoctor.getName());
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(1000, 700);

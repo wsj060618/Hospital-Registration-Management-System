@@ -8,12 +8,15 @@ import Dao.PatientDao;
 import Dao.AppointmentSlotDao;
 import Util.DBUtil;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,6 +55,7 @@ public class AdminManagementFrm extends JFrame {
 
     // 初始化窗口
     private void initFrame() {
+        setIconImage(getDefaultIcon());
         setTitle("管理员工作台 - " + currentAdmin.getUsername());
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(1200, 800);
@@ -1450,6 +1454,26 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
             add(btnPanel, BorderLayout.SOUTH);
 
             setVisible(true);
+        }
+    }
+
+    /**
+     * 获取默认窗口图标
+     */
+    private Image getDefaultIcon() {
+        try {
+            // 使用文件路径加载图标
+            File iconFile = new File("resource/ico_ICRC.png");
+            if (iconFile.exists()) {
+                return ImageIO.read(iconFile);
+            }
+            // 图标不存在时返回系统默认图标
+            System.out.println("图标文件不存在: " + iconFile.getAbsolutePath());
+            return Toolkit.getDefaultToolkit().createImage(new byte[0]);
+        } catch (IOException e) {
+            // 加载失败时返回系统默认图标
+            System.out.println("图标加载失败: " + e.getMessage());
+            return Toolkit.getDefaultToolkit().createImage(new byte[0]);
         }
     }
 

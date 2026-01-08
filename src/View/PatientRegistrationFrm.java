@@ -241,6 +241,12 @@ public class PatientRegistrationFrm extends JFrame {
                 dept.setDescription(rs.getString("description"));
                 deptComboBox.addItem(dept);
             }
+
+            // 修复：加载科室后自动选择第一个科室并加载对应医生
+            if (deptComboBox.getItemCount() > 0) {
+                deptComboBox.setSelectedIndex(0);
+                loadDoctorsByDept();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "加载科室失败：" + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
@@ -248,6 +254,7 @@ public class PatientRegistrationFrm extends JFrame {
             closeConnection(conn, null, rs);
         }
     }
+
 
     /**
      * 根据选择的科室加载对应医生
@@ -272,9 +279,15 @@ public class PatientRegistrationFrm extends JFrame {
                 // 下拉框显示：医生姓名 + 职称
                 doctorComboBox.addItem(doctor);
             }
-            // 清空号源列表
+
+            // 修复：加载医生后自动选择第一个医生并加载对应号源
             slotListModel.clear();
-            tipLabel.setText("请选择医生查看可用号源");
+            if (doctorComboBox.getItemCount() > 0) {
+                doctorComboBox.setSelectedIndex(0);
+                loadSlotsByDoctor();
+            } else {
+                tipLabel.setText("该科室暂无医生");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "加载医生失败：" + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
@@ -283,46 +296,10 @@ public class PatientRegistrationFrm extends JFrame {
         }
     }
 
+
     /**
      * 根据选择的医生加载可用号源（仅显示剩余号源>0的）
      */
-//    private void loadSlotsByDoctor() {
-//        Doctor selectedDoctor = (Doctor) doctorComboBox.getSelectedItem();
-//        if (selectedDoctor == null) return;
-//
-//        Connection conn = null;
-//        ResultSet rs = null;
-//        try {
-//            conn = DBUtil.getConnection();
-//            rs = slotDao.listByDoctorId(conn, selectedDoctor.getDoctorId());
-//            slotListModel.clear();
-//            while (rs.next()) {
-//                int remainingNum = rs.getInt("remainingNum");
-//                if (remainingNum <= 0) continue; // 过滤已约满的号源
-//
-//                AppointmentSlot slot = new AppointmentSlot();
-//                slot.setSlotId(rs.getLong("slotId"));
-//                slot.setVisitDate(rs.getDate("visitDate"));
-//                slot.setTimeSlot(rs.getString("timeSlot"));
-//                slot.setTotalNum(rs.getInt("totalNum"));
-//                slot.setRemainingNum(remainingNum);
-//                slot.setDoctorId(rs.getLong("doctorId"));
-//                slotListModel.addElement(slot);
-//            }
-//
-//            if (slotListModel.size() == 0) {
-//                tipLabel.setText("该医生暂无可用号源，请选择其他医生");
-//            } else {
-//                tipLabel.setText("请选择号源（剩余号源实时更新）");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(this, "加载号源失败：" + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
-//        } finally {
-//            closeConnection(conn, null, rs);
-//        }
-//    }
-    // 仅修改 loadSlotsByDoctor 方法，其他代码保持不变
     private void loadSlotsByDoctor() {
         Doctor selectedDoctor = (Doctor) doctorComboBox.getSelectedItem();
         if (selectedDoctor == null) return;
