@@ -79,7 +79,7 @@ public class PatientLoginForm extends JFrame {
         // 性别标签与下拉框
         JLabel genderLabel = new JLabel("性别");
         genderLabel.setFont(new Font("微软雅黑", Font.PLAIN, 16));
-        genderComboBox = new JComboBox<>(new String[]{"未知", "男", "女"});
+        genderComboBox = new JComboBox<>(new String[]{"男", "女", "未知"});
         genderComboBox.setFont(new Font("微软雅黑", Font.PLAIN, 16));
         genderComboBox.setPreferredSize(new Dimension(220, 40));
         genderComboBox.setBackground(Color.WHITE);

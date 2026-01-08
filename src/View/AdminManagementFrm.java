@@ -1075,10 +1075,26 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         bottomPanel.setBackground(Color.WHITE);
         JButton addBtn = new JButton("新增用户");
+        JButton editBtn = new JButton("修改用户");
         JButton deleteBtn = new JButton("删除用户");
 
         addBtn.addActionListener(e -> new UserAddDialog(this));
+        // 修改用户按钮事件
+        editBtn.addActionListener(e -> {
+            int selectedRow = userTable.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "请先选择要修改的用户！", "提示", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
+            // 获取选中用户的信息
+            String username = (String) userModel.getValueAt(selectedRow, 0);
+            String password = (String) userModel.getValueAt(selectedRow, 1);
+            String identity = (String) userModel.getValueAt(selectedRow, 2);
+
+            // 打开修改对话框
+            new UserEditDialog(this, username, password, identity);
+        });
         // 删除用户按钮事件
         deleteBtn.addActionListener(e -> {
             int selectedRow = userTable.getSelectedRow();
@@ -1089,7 +1105,6 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
 
             // 获取用户名
             String username = (String) userModel.getValueAt(selectedRow, 0);
-
             // 确认删除
             int confirm = JOptionPane.showConfirmDialog(this,
                     "确定要删除用户\"" + username + "\"吗？\n此操作不可恢复！",
@@ -1116,6 +1131,7 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
         });
 
         bottomPanel.add(addBtn); // 新增按钮
+        bottomPanel.add(editBtn); // 修改按钮
         bottomPanel.add(deleteBtn); // 删除按钮
         panel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -1124,7 +1140,6 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
     }
 
 
-    // 加载用户数据
     // 加载用户数据
     private void loadUserData() {
         loadUserData("");
@@ -1236,6 +1251,130 @@ bottomPanel.add(deleteBtn); // 删除按钮在后
             setVisible(true);
         }
     }
+
+    // 修改用户对话框（内部类）
+    class UserEditDialog extends JDialog {
+        private String originalUsername;
+
+        public UserEditDialog(JFrame parent, String originalUsername, String password, String identity) {
+            super(parent, "修改用户", true);
+            this.originalUsername = originalUsername;
+            setSize(500, 300);
+            setLocationRelativeTo(parent);
+            setResizable(false);
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+            panel.setBackground(Color.WHITE);
+
+            // 原用户名行
+            JPanel originalUsernamePanel = new JPanel();
+            originalUsernamePanel.setLayout(new BoxLayout(originalUsernamePanel, BoxLayout.X_AXIS));
+            originalUsernamePanel.setBackground(Color.WHITE);
+            JLabel originalUsernameLabel = new JLabel("原用户名：");
+            originalUsernameLabel.setPreferredSize(new Dimension(80, 25));
+            originalUsernamePanel.add(originalUsernameLabel);
+            originalUsernamePanel.add(new JLabel(originalUsername));
+            originalUsernamePanel.add(Box.createHorizontalGlue());
+            panel.add(originalUsernamePanel);
+            panel.add(Box.createVerticalStrut(10));
+
+            // 新用户名行
+            JPanel newUsernamePanel = new JPanel();
+            newUsernamePanel.setLayout(new BoxLayout(newUsernamePanel, BoxLayout.X_AXIS));
+            newUsernamePanel.setBackground(Color.WHITE);
+            JLabel newUsernameLabel = new JLabel("新用户名：");
+            newUsernameLabel.setPreferredSize(new Dimension(80, 25));
+            newUsernamePanel.add(newUsernameLabel);
+            JTextField usernameField = new JTextField(originalUsername);
+            usernameField.setPreferredSize(new Dimension(200, 25));
+            newUsernamePanel.add(usernameField);
+            newUsernamePanel.add(Box.createHorizontalGlue());
+            panel.add(newUsernamePanel);
+            panel.add(Box.createVerticalStrut(10));
+
+            // 密码行
+            JPanel passwordPanel = new JPanel();
+            passwordPanel.setLayout(new BoxLayout(passwordPanel, BoxLayout.X_AXIS));
+            passwordPanel.setBackground(Color.WHITE);
+            JLabel passwordLabel = new JLabel("密码：");
+            passwordLabel.setPreferredSize(new Dimension(80, 25));
+            passwordPanel.add(passwordLabel);
+            JPasswordField passwordField = new JPasswordField(password);
+            passwordField.setPreferredSize(new Dimension(200, 25));
+            passwordPanel.add(passwordField);
+            passwordPanel.add(Box.createHorizontalGlue());
+            panel.add(passwordPanel);
+            panel.add(Box.createVerticalStrut(10));
+
+            // 身份行
+            JPanel identityPanel = new JPanel();
+            identityPanel.setLayout(new BoxLayout(identityPanel, BoxLayout.X_AXIS));
+            identityPanel.setBackground(Color.WHITE);
+            JLabel identityLabel = new JLabel("身份：");
+            identityLabel.setPreferredSize(new Dimension(80, 25));
+            identityPanel.add(identityLabel);
+            JComboBox<String> identityBox = new JComboBox<>(new String[]{"admin", "doctor"});
+            identityBox.setSelectedItem(identity);
+            identityBox.setPreferredSize(new Dimension(200, 25));
+            identityPanel.add(identityBox);
+            identityPanel.add(Box.createHorizontalGlue());
+            panel.add(identityPanel);
+            panel.add(Box.createVerticalStrut(20));
+
+            // 按钮面板
+            JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+            btnPanel.setBackground(Color.WHITE);
+            JButton saveBtn = new JButton("保存");
+            JButton cancelBtn = new JButton("取消");
+
+            // 保存事件
+            saveBtn.addActionListener(e -> {
+                String newUsername = usernameField.getText().trim();
+                String newPassword = new String(passwordField.getPassword()).trim();
+                String newIdentity = (String) identityBox.getSelectedItem();
+
+                if (newUsername.isEmpty() || newPassword.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "用户名和密码不能为空！", "提示", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if (newPassword.length() != 6) {
+                    JOptionPane.showMessageDialog(this, "密码必须为6位数！", "提示", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                Connection conn = null;
+                try {
+                    conn = DBUtil.getConnection();
+                    Users user = new Users(newUsername, newPassword, newIdentity);
+                    int count = userDao.updateUser(conn, originalUsername, user);
+                    if (count > 0) {
+                        JOptionPane.showMessageDialog(this, "用户修改成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                        loadUserData(); // 刷新用户列表
+                    } else {
+                        JOptionPane.showMessageDialog(this, "用户修改失败，未找到该用户！", "错误", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "修改失败：" + ex.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                } finally {
+                    DBUtil.close(conn, null, null);
+                }
+            });
+
+            // 取消事件
+            cancelBtn.addActionListener(e -> dispose());
+
+            btnPanel.add(saveBtn);
+            btnPanel.add(cancelBtn);
+            panel.add(btnPanel);
+
+            add(panel);
+            setVisible(true);
+        }
+    }
+
 
     /**
      * 创建医生管理面板

@@ -112,6 +112,24 @@ public class UserDao {
     }
 
     /**
+     * 修改用户信息
+     * @param conn 数据库连接
+     * @param originalUsername 原用户名
+     * @param user 用户对象（包含新的用户名、密码和身份）
+     * @return 修改的用户数量
+     * @throws SQLException 数据库操作异常
+     */
+    public int updateUser(Connection conn, String originalUsername, Users user) throws SQLException {
+        String sql = "UPDATE users SET username = ?, password = ?, identity = ? WHERE username = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, user.getUsername());
+        pstmt.setString(2, user.accessGetPassword(this));
+        pstmt.setString(3, user.getIdentity());
+        pstmt.setString(4, originalUsername);
+        return pstmt.executeUpdate();
+    }
+
+    /**
      * 根据用户名删除用户
      * @param conn 数据库连接
      * @param username 用户名
