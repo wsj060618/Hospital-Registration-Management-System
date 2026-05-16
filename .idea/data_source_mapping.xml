@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/.idea/queries/Query.sql" value="cea5caff-da77-44a9-8b07-4a22c9051bd4" />
+    <file url="file://$PROJECT_DIR$/src/Dao/AppointmentSlotDao.java" value="cea5caff-da77-44a9-8b07-4a22c9051bd4" />
+    <file url="file://$PROJECT_DIR$/src/Dao/DepartmentDao.java" value="cea5caff-da77-44a9-8b07-4a22c9051bd4" />
+    <file url="file://$PROJECT_DIR$/src/Dao/DoctorDao.java" value="cea5caff-da77-44a9-8b07-4a22c9051bd4" />
+    <file url="file://$PROJECT_DIR$/src/Dao/PatientDao.java" value="cea5caff-da77-44a9-8b07-4a22c9051bd4" />
+    <file url="file://$PROJECT_DIR$/src/Dao/RegistrationRecordDao.java" value="cea5caff-da77-44a9-8b07-4a22c9051bd4" />
+    <file url="file://$PROJECT_DIR$/src/Dao/UserDao.java" value="cea5caff-da77-44a9-8b07-4a22c9051bd4" />
+  </component>
+</project>
